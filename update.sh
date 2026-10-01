@@ -2,11 +2,9 @@
 # update_epl_matches.sh - Fetch and update EPL matches in SQLite database
 
 API_TOKEN="acb443dbb70c4852b1958b034cdafac6"
-DB_FILE="epl_data.db"
+DB_FILE="$HOME/Desktop/epl/epl_data.db"
 DATE_TO=$(date +%Y-%m-%d)
 DATE_FROM=$(date -v-7d +%Y-%m-%d)
-
-echo "Fetching EPL matches from $DATE_FROM to $DATE_TO..."
 
 # Fetch matches from API
 API_RESPONSE=$(curl -s -H "X-Auth-Token: $API_TOKEN" \
