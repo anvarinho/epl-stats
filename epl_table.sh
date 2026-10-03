@@ -33,7 +33,8 @@ show_season_table() {
     # 4. Head-to-Head (not implemented here)
     # 5. Fewest Red/Yellow Cards (not tracked)
     
-    sqlite3 -header -column "$DB_FILE" "
+    local table_output
+    table_output=$(sqlite3 -header -column "$DB_FILE" "
     WITH team_stats AS (
         SELECT 
             t.id as team_id,
@@ -108,7 +109,30 @@ show_season_table() {
         END as 'European/Rel'
     FROM table_data
     ORDER BY points DESC, goal_difference DESC, goals_for DESC;
-    "
+    ") || return 1
+
+    if [ -t 1 ]; then
+        printf '%s\n' "$table_output" | awk \
+            -v top_color=$'\033[38;2;255;248;220m' \
+            -v middle_color=$'\033[1;38;2;255;255;255m' \
+            -v fifth_color=$'\033[38;2;155;160;170m' \
+            -v reset=$'\033[0m' '
+            /^ *[0-9]+  / {
+                position = $0
+                sub(/^[[:space:]]*/, "", position)
+                sub(/[^0-9].*/, "", position)
+                position += 0
+                if (position >= 1 && position <= 4) print top_color $0 reset
+                else if (position >= 5 && position <= 16) print middle_color $0 reset
+                else if (position >= 17) print fifth_color $0 reset
+                else print
+                next
+            }
+            { print }
+        '
+    else
+        printf '%s\n' "$table_output"
+    fi
     
     echo
     echo "════════════════════════════════════════════════════════════════════════════════"

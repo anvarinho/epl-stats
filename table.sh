@@ -108,7 +108,9 @@ while IFS='|' read -r pos name P W D L GF GA GD Pts Euro; do
     
     # Determine color based on Euro column
     color=""
-    if [[ "$Euro" == "UCL" ]]; then
+    if [[ "$pos" == "1" ]]; then
+        color="$WHITE"
+    elif [[ "$Euro" == "UCL" ]]; then
         color="$CYAN"
     elif [[ "$Euro" == "UEL" ]]; then
         color="$GREEN"

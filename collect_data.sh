@@ -42,6 +42,20 @@ EOF
 insert_match() {
     local match_json="$1"
     local season_id="$2"
+
+    # football-data.org exposes an internal season ID; this database and its
+    # table commands use the season's start year (for example, 2026).
+    local season_start
+    season_start=$(echo "$match_json" | jq -r '.season.startDate // empty')
+    if [[ "$season_start" =~ ^[0-9]{4}- ]]; then
+        season_id="${season_start:0:4}"
+    fi
+    if [[ "$season_id" =~ ^[0-9]{4}$ ]]; then
+        sqlite3 "$DB_FILE" <<EOF
+INSERT OR IGNORE INTO seasons (id, start_date, end_date, current)
+VALUES ($season_id, '$season_id-08-01', '$((season_id + 1))-05-31', 0);
+EOF
+    fi
     
     local match_id=$(echo "$match_json" | jq -r '.id')
     local matchday=$(echo "$match_json" | jq -r '.matchday // 0')
@@ -337,6 +351,45 @@ force_update_recent_matches() {
     fi
 }
 
+# Backfill one explicit date range, inclusive. This keeps completed weekly
+# imports bounded and avoids adding fixtures outside the requested period.
+fetch_match_range() {
+    local date_from="$1"
+    local date_to="$2"
+
+    if [[ ! "$date_from" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ || ! "$date_to" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ || "$date_from" > "$date_to" ]]; then
+        log_error "Use a valid inclusive date range: YYYY-MM-DD YYYY-MM-DD"
+        return 1
+    fi
+
+    log_info "Backfilling matches from $date_from through $date_to"
+    local response
+    response=$(api_call "competitions/$COMPETITION_ID/matches?dateFrom=$date_from&dateTo=$date_to") || return 1
+
+    if ! echo "$response" | jq -e '.matches | type == "array"' >/dev/null; then
+        log_error "Invalid API response for date range $date_from through $date_to"
+        return 1
+    fi
+
+    local match_count
+    match_count=$(echo "$response" | jq -r '.resultSet.count // (.matches | length)')
+    while IFS= read -r match; do
+        [ -n "$match" ] || continue
+        local season home_team away_team
+        season=$(echo "$match" | jq -r '.season.id')
+        home_team=$(echo "$match" | jq -c '.homeTeam')
+        away_team=$(echo "$match" | jq -c '.awayTeam')
+        insert_team "$home_team"
+        insert_team "$away_team"
+        if echo "$match" | jq -e '.referees | length > 0' >/dev/null; then
+            insert_referee "$(echo "$match" | jq -c '.referees[0]')"
+        fi
+        insert_match "$match" "$season"
+    done < <(echo "$response" | jq -c '.matches[]')
+
+    log_success "Backfilled $match_count matches from $date_from through $date_to"
+}
+
 # Function to check for missing scores
 check_missing_scores() {
     log_info "Checking for matches with missing scores..."
@@ -405,6 +458,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             ;;
         "force-update")
             force_update_recent_matches "${2:-7}"
+            ;;
+        "range")
+            if [ -z "$2" ] || [ -z "$3" ]; then
+                log_error "Usage: $0 range YYYY-MM-DD YYYY-MM-DD"
+                exit 1
+            fi
+            fetch_match_range "$2" "$3"
             ;;
         "fix-scores")
             check_missing_scores
