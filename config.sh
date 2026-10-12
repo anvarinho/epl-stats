@@ -87,10 +87,10 @@ api_call() {
         
         # Make API call with verbose output to capture headers
         local http_code
-        http_code=$(curl -s -w "%{http_code}" \
+        http_code=$(curl -sS --connect-timeout 15 --max-time 60 -w "%{http_code}" \
             -H "X-Auth-Token: $API_TOKEN" \
             -o "$temp_file" \
-            "$API_BASE/$endpoint")
+            "$API_BASE/$endpoint") || http_code=000
         
         local content
         content=$(cat "$temp_file")
@@ -99,21 +99,22 @@ api_call() {
         if [ "$http_code" -eq 200 ]; then
             echo "$content"
             return 0
-        elif [ "$http_code" -eq 429 ]; then
-            log_warning "Rate limit hit, waiting ${wait_time}s..."
+        elif [ "$http_code" = 429 ]; then
+            log_warning "Rate limit hit for endpoint: $endpoint" >&2
+        else
+            log_error "API call failed with HTTP $http_code for endpoint: $endpoint" >&2
+            if [ -n "$content" ]; then
+                log_error "API response: $content" >&2
+            fi
+        fi
+        retry_count=$((retry_count + 1))
+        if [ "$retry_count" -lt "$max_retries" ]; then
             sleep $wait_time
             wait_time=$((wait_time * 2))
-        else
-            log_error "API call failed with HTTP $http_code for endpoint: $endpoint"
-            if [ -n "$content" ]; then
-                log_error "API response: $content"
-            fi
-            retry_count=$((retry_count + 1))
-            sleep $wait_time
         fi
     done
     
-    log_error "Failed after $max_retries attempts for endpoint: $endpoint"
+    log_error "Failed after $max_retries attempts for endpoint: $endpoint" >&2
     return 1
 }
 

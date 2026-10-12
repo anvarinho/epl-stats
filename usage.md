@@ -52,11 +52,33 @@ make team NAME="Arsenal"
 
 ./inspect_db.sh schema
 
-## Cron Job for Daily Updates:
+## Automatic weekend results (Linux/systemd)
 
-# Add to crontab (crontab -e)
+```bash
+make install-weekly
+make weekly-status
+```
 
-0 6 \* \* \* /path/to/epl-collector/collect_data.sh daily
+The user timer runs every **Tuesday at 09:00 Asia/Bishkek**, after Monday
+evening games in England. It imports the previous seven days through the
+current UK date, covering Friday–Monday results and any midweek matches.
+Existing matches are refreshed, including corrected scores and statuses.
+An empty match window (for example, an international break) is successful.
+
+Missed runs are caught up when the user timer next starts after login/resume.
+The machine needs internet access; failures retry twice at 15-minute intervals.
+This user timer does not wake a powered-off machine or enable background
+execution after logout. A catch-up run fetches the latest seven days, so use
+`collect_data.sh range YYYY-MM-DD YYYY-MM-DD` for older gaps after long absences.
+
+Run `make weekly` to fetch immediately, or `make disable-weekly` to stop the
+schedule. Data goes to `epl_data.db`, with logs in `epl_etl.log` and the user
+journal. The scripts resolve the project directory themselves. Re-run the
+installer if you move the checkout. Requires Bash, curl, jq, sqlite3, GNU date,
+flock, and a systemd user session. API credentials use `config.sh`.
+
+To change the schedule, edit `systemd/epl-weekend.timer`, run
+`make install-weekly`, then `systemctl --user restart epl-weekend.timer`.
 
 ## Testing Commands:
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Fetch the past week's Premier League matches
+StartLimitIntervalSec=6h
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash "@PROJECT_DIR@/weekly.sh"
+TimeoutStartSec=10min
+Restart=on-failure
+RestartSec=15min

@@ -1,6 +1,6 @@
 # EPL Data Collection System Makefile
 
-.PHONY: all init backfill daily stats clean help
+.PHONY: all init backfill daily weekly install-weekly weekly-status disable-weekly stats clean help
 
 DB_FILE ?= epl_data.db
 
@@ -20,6 +20,19 @@ daily:
 	@echo "Fetching daily updates..."
 	@chmod +x collect_data.sh
 	@./collect_data.sh daily
+
+weekly:
+	@bash ./weekly.sh
+
+install-weekly:
+	@bash ./install-weekly-timer.sh
+
+weekly-status:
+	@systemctl --user list-timers epl-weekend.timer --no-pager
+	@journalctl --user -u epl-weekend.service -n 20 --no-pager
+
+disable-weekly:
+	@systemctl --user disable --now epl-weekend.timer
 
 season:
 	@echo "Fetching specific season: $(YEAR)"
@@ -47,6 +60,10 @@ help:
 	@echo "  make init        - Initialize database"
 	@echo "  make backfill    - Backfill 5 years of historical data"
 	@echo "  make daily       - Fetch daily updates"
+	@echo "  make weekly      - Fetch the past seven days of matches"
+	@echo "  make install-weekly - Enable Tuesday 09:00 Bishkek automatic updates"
+	@echo "  make weekly-status - Show schedule and recent import logs"
+	@echo "  make disable-weekly - Disable automatic weekly updates"
 	@echo "  make season YEAR=2023 - Fetch specific season"
 	@echo "  make stats       - Show database statistics"
 	@echo "  make team NAME='Team Name' - Show team matches"

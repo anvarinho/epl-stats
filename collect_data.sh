@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Main data collection script for EPL matches (macOS compatible)
-source config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 
 # Function to get season years for backfill
 get_season_years() {

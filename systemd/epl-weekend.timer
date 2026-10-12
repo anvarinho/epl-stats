@@ -1,0 +1,11 @@
+[Unit]
+Description=Fetch Premier League weekend results every Tuesday morning
+
+[Timer]
+OnCalendar=Tue *-*-* 09:00:00 Asia/Bishkek
+Persistent=true
+AccuracySec=1min
+Unit=epl-weekend.service
+
+[Install]
+WantedBy=timers.target

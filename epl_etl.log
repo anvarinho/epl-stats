@@ -407,3 +407,54 @@
 [0;34m[INFO][0m 2026-10-03 18:35:22 - Generating EPL table for season: 2026
 [0;32m[SUCCESS][0m 2026-10-03 18:35:57 - All dependencies available
 [0;34m[INFO][0m 2026-10-03 18:35:57 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-03 20:06:47 - All dependencies available
+[0;34m[INFO][0m 2026-10-03 20:06:47 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-04 07:36:16 - All dependencies available
+[0;34m[INFO][0m 2026-10-04 07:36:16 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-05 17:10:02 - All dependencies available
+[0;34m[INFO][0m 2026-10-05 17:10:02 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-06 14:02:41 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 14:02:41 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-06 14:09:39 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 14:09:39 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-06 14:10:42 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 14:10:42 - Testing API connection...
+[0;31m[ERROR][0m 2026-10-06 14:10:42 - API call failed with HTTP 000 for endpoint: competitions/PL
+[0;31m[ERROR][0m 2026-10-06 14:10:47 - API call failed with HTTP 000 for endpoint: competitions/PL
+[0;31m[ERROR][0m 2026-10-06 14:10:52 - API call failed with HTTP 000 for endpoint: competitions/PL
+[0;31m[ERROR][0m 2026-10-06 14:10:57 - Failed after 3 attempts for endpoint: competitions/PL
+[0;31m[ERROR][0m 2026-10-06 14:10:57 - API connection failed
+[0;32m[SUCCESS][0m 2026-10-06 14:11:01 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 14:11:01 - Testing API connection...
+[0;32m[SUCCESS][0m 2026-10-06 14:11:02 - API connection successful - Connected to: Premier League
+[0;34m[INFO][0m 2026-10-06 14:11:02 - Force updating all matches from last 7 days
+[0;34m[INFO][0m 2026-10-06 14:11:02 - Force updating 0 matches from 2026-09-29 to 2026-10-06
+[0;32m[SUCCESS][0m 2026-10-06 14:11:02 - Force updated 0 matches
+[0;32m[SUCCESS][0m 2026-10-06 14:14:18 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 14:14:18 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-06 18:11:04 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 18:11:04 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-06 18:14:43 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 18:14:43 - Generating EPL table for season: 2025
+[0;32m[SUCCESS][0m 2026-10-06 18:14:53 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 18:14:53 - Generating EPL table for season: 2024
+[0;32m[SUCCESS][0m 2026-10-06 18:18:31 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 18:18:31 - Generating EPL table for season: 2024
+[0;32m[SUCCESS][0m 2026-10-06 18:18:36 - All dependencies available
+[0;34m[INFO][0m 2026-10-06 18:18:36 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-07 20:54:13 - All dependencies available
+[0;34m[INFO][0m 2026-10-07 20:54:13 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-07 21:30:21 - All dependencies available
+[0;34m[INFO][0m 2026-10-07 21:30:21 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-08 20:42:41 - All dependencies available
+[0;34m[INFO][0m 2026-10-08 20:42:41 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-11 15:06:59 - All dependencies available
+[0;32m[SUCCESS][0m 2026-10-11 15:06:59 - All dependencies available
+[0;34m[INFO][0m 2026-10-11 15:06:59 - Testing API connection...
+[0;32m[SUCCESS][0m 2026-10-11 15:07:00 - API connection successful - Connected to: Premier League
+[0;34m[INFO][0m 2026-10-11 15:07:00 - Backfilling matches from 2026-10-04 through 2026-10-11
+[0;32m[SUCCESS][0m 2026-10-11 15:07:01 - Backfilled 9 matches from 2026-10-04 through 2026-10-11
+[0;32m[SUCCESS][0m 2026-10-12 22:06:14 - All dependencies available
+[0;34m[INFO][0m 2026-10-12 22:06:14 - Generating EPL table for season: 2026
+[0;32m[SUCCESS][0m 2026-10-12 22:08:42 - All dependencies available
+[0;34m[INFO][0m 2026-10-12 22:08:42 - Generating EPL table for season: 2026
